@@ -6,6 +6,69 @@
 #include <vector>
 
 
+void test() {
+    
+    std::vector<int> nums{1,2,3,4};
+    
+    std::vector<int> nums2(nums.begin() +1,nums.end());
+
+
+}
+
+
+template <typename T>
+std::vector<T> merge(const std::vector<T>& a,const std::vector<T>& b) {
+    
+    int i{},j{};
+    
+    std::vector<T> merged{};
+    while (i < a.size() || j < b.size()) {
+        if(j == b.size() || (i < a.size() && a.at(i) <= b.at(j))) {
+            merged.push_back(a.at(i)); 
+            ++i;
+        } else {
+            merged.push_back(b.at(j));
+            ++j;
+        }
+
+    }
+
+
+    return merged;
+
+}
+
+
+template <typename T>
+std::vector<T> mergesort_helper(std::vector<T>& a,int low,int high) {
+    
+    if(low == high)
+        return std::vector<T>{a.at(low)};
+
+
+
+    int mid{static_cast<int>((low + high) /2)};
+
+    return merge(mergesort_helper(a,low,mid),mergesort_helper(a,mid + 1,high));
+
+
+
+}
+
+
+
+template <typename T>
+std::vector<T> mergesort(std::vector<T> a) {
+    
+    
+    return mergesort_helper(a,0,a.size() -1);
+
+
+
+
+}
+
+
 template<typename T>
 struct Under {
     
@@ -100,30 +163,37 @@ int main() {
     const int size{100};
     
     int a[size]{};
-    
+    std::vector<int> nums; 
     for(int i =0;i < size;++i) {
         a[i] = generate_random_number(end);
+        nums.push_back(generate_random_number(end));
     }
 
-    auto begin = a;
+    //auto begin = a;
 
-    std::cout << "Original Array" << std::endl;
-    std::for_each(a,a + size,[](auto value) {std::cout << value << ' ';});
+    //std::cout << "Original Array" << std::endl;
+    //std::for_each(a,a + size,[](auto value) {std::cout << value << ' ';});
+    //std::cout << std::endl;
+   
+    std::for_each(nums.begin(),nums.end(),[](auto v) {std::cout << v << ' ';});
     std::cout << std::endl;
+    auto result = mergesort(nums);
+        
+    std::cout << "Sorted Array\n";
+    std::for_each(result.begin(),result.end(),[](auto v) {std::cout << v << ' ';});
+    std::cout << std::endl;
+    //std::cout << "Sorted Array" << std::endl;
+    //std::for_each(a,a + size,[](auto value) {std::cout << value << ' ';});
 
-    insertion_sort(a,size);
-
-    std::cout << "Sorted Array" << std::endl;
-    std::for_each(a,a + size,[](auto value) {std::cout << value << ' ';});
-
-    std::cout << std::endl; 
+    //std::cout << std::endl; 
     
-
+    /*
     std::vector<int> nums{1,2,3,4,5};
 
     int count = std::count_if(nums.begin(),nums.end() - 1,Under<int>(6));
 
     std::cout << count << std::endl;
+    */
     
 
 
