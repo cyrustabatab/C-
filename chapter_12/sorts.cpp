@@ -6,6 +6,9 @@
 #include <vector>
 
 
+
+
+
 void test() {
     
     std::vector<int> nums{1,2,3,4};
@@ -15,6 +18,70 @@ void test() {
 
 }
 
+
+
+
+
+
+
+
+
+template <typename T>
+int partition(std::vector<T>& a,int low,int high) {
+    
+    int pivot_index{low + std::rand() % (high -low + 1)};
+    
+    T temp{a.at(low)};
+    a.at(low) = a.at(pivot_index);
+    a.at(pivot_index)=temp;
+    
+    T pivot{a.at(low)};
+    int i{low + 1};
+    int j{i};
+
+    while(j <= high) {
+        if(a[j] < pivot) {
+            temp = a.at(i);
+            a.at(i) = a.at(j);
+            a.at(j) = temp;
+            ++i;
+        }
+        ++j;
+    }
+    
+    
+    temp= a.at(low);
+    a.at(low) = a.at(i -1);
+    a.at(i -1) = temp;
+
+    return i -1;
+
+
+
+
+
+
+}
+
+template <typename T>
+void _quicksort_helper(std::vector<T>& a ,int low,int high) {
+    
+    if(low >= high)
+        return;
+
+    int p{partition(a,low,high)};
+    
+    
+    _quicksort_helper(a,low,p -1);
+    _quicksort_helper(a,p + 1,high);
+
+
+}
+template <typename T>
+void quicksort(std::vector<T>& a) {
+    
+    _quicksort_helper(a,0,a.size() - 1);
+}
 
 template <typename T>
 std::vector<T> merge(const std::vector<T>& a,const std::vector<T>& b) {
@@ -89,9 +156,8 @@ void bubble_sort(int a[],int size) {
 
     int end{size};
     
-
-    while(true) {
-        bool stabilized{true};
+    bool stabilized{true};
+    do {
         for(int i=0;i < end - 1;++i) {
              if(a[i] > a[i +1]) {
                 stabilized = false;
@@ -103,10 +169,7 @@ void bubble_sort(int a[],int size) {
 
         }
 
-        if(stabilized) {
-            break;
-        }
-    }
+    } while(!stabilized);
 
 
 }
@@ -177,10 +240,10 @@ int main() {
    
     std::for_each(nums.begin(),nums.end(),[](auto v) {std::cout << v << ' ';});
     std::cout << std::endl;
-    auto result = mergesort(nums);
+    quicksort(nums);
         
     std::cout << "Sorted Array\n";
-    std::for_each(result.begin(),result.end(),[](auto v) {std::cout << v << ' ';});
+    std::for_each(nums.begin(),nums.end(),[](auto v) {std::cout << v << ' ';});
     std::cout << std::endl;
     //std::cout << "Sorted Array" << std::endl;
     //std::for_each(a,a + size,[](auto value) {std::cout << value << ' ';});
